@@ -1,0 +1,39 @@
+package myaccount.model;
+
+import java.util.Random;
+
+
+
+public class tsgt {
+
+	static public void main(String arg[]) {
+	String[]	 DealType= {"stock","normal","transfer"};
+	String[]	 category= {"stock","normal","transfer"};
+
+	
+	Deal deals[]=new Deal[10];
+	Random rand = new Random();
+	int choose;
+	for(int i=0;i<10;i++){
+		choose=rand.nextInt(1001)%3;
+		Integer amount2=rand.nextInt(1000000);
+		Integer amount1=rand.nextInt(10);
+		if(choose ==0) {
+			deals[i]=new TransferDeal(new FixedtAccount(),new Person("bob"+amount1.toString()),new FixedtAccount(),amount[1]);
+		}
+		else if(choose ==1) {
+			deals[i]=new NormalDeal("what?",new Person("catlin"+amount2.toString()),amount2.toString());
+		}
+		else if(choose ==2) {
+			 deals[i]=new StockDeal("what?",amount2.toString(),amount2.toString(),new Person()) ;
+		}
+	}
+	for(int i=0;i<10;i++) {
+		System.out.println(deals[i].toPlainText());
+		System.out.println(deals[i].toPlainText());
+	}
+	}
+}
+
+
+

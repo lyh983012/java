@@ -1,0 +1,8 @@
+package computer;
+
+public class test {
+
+	public void main (String arg[]) {
+		Computer<Double> Pc1= new Computer<Double>();//范型必须是类类型
+	}
+}

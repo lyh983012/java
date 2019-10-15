@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;problem4.manager_base.java&apos; to &apos;data_base.java&apos;&#x0A;- Original project: &apos;Exp4&apos;&#x0A;- Original element: &apos;problem4.manager_base.java&apos;&#x0A;- Renamed element: &apos;problem4.data_base.java&apos;" description="Rename compilation unit &apos;manager_base.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;problem4{manager_base.java" name="data_base.java" references="false" stamp="1539925890716" version="1.0"/>
+</session>

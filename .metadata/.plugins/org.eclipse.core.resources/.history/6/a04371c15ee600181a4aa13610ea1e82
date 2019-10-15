@@ -1,0 +1,15 @@
+package myaccount.model;
+
+public class tsgt {
+
+	static public void main(String arg[]) {
+	String[]	 DealType= {"stock","normal","transfer"};
+	String[]	 category= {"stock","normal","transfer"};
+	Person temp=new Person();
+	String[]	 amount= {"100","1000","10000"};
+	String time[]= {""}
+	Deal test1= new Deal(String dealType,String category,Person person,String amount,String time) ;
+	
+	
+	}
+}

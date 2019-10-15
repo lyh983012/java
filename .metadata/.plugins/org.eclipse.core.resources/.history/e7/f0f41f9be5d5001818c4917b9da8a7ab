@@ -1,0 +1,67 @@
+package problem5;
+
+public class StringEncryptor {
+
+	static public void main(String arg[]) {
+		
+		String arg1="We will break out of prison at dawn";
+		StringEncryptor Map = new StringEncryptor();
+		Map.encode(arg1);
+		Map.decode(Map.encoded.toString());
+	}
+	
+	StringBuffer decoded;
+	StringBuffer encoded;
+	String input;
+	
+	char[] alphablets= {'v','e','k','n','o',
+			'h','z','f','i','l',
+			'j','x','d','m','y','g','b','r',
+			'c','s','w','q','u','p','t','a'};
+	char[] alphablets2= {'V','E','K','N','O',
+			'H','Z','F','I','L',
+			'J','X','D','M','Y','G','B','R',
+			'C','S','W','Q','U','P','T','A'};
+	void encode(String input) {
+		StringBuffer unencoded;
+		StringBuffer encoded;
+		unencoded=new StringBuffer(input);
+		encoded=new StringBuffer(unencoded.length());
+		for(int i=0;i<=unencoded.length()-1;i++) {
+			if('a'<=unencoded.charAt(i) && unencoded.charAt(i)<='z') {
+				encoded.insert(i,alphablets[unencoded.charAt(i)-'a']);
+			}else if('A'<=unencoded.charAt(i) && unencoded.charAt(i)<='Z') {
+				encoded.insert(i,alphablets2[unencoded.charAt(i)-'A']);
+			}else if(' '==unencoded.charAt(i)) {
+				encoded.insert(i,'_');
+			}else {
+				System.out.println("a character in index="+i+"is in wrong format");
+			}
+			System.out.println(i);
+		}
+		System.out.println(encoded);
+		this.encoded=new StringBuffer(encoded);
+	}
+	
+	void decode(String input) {
+		StringBuffer encoded;
+		StringBuffer decoded;
+		encoded=new StringBuffer(input);
+		decoded=new StringBuffer(encoded.length());
+		for(int i=0;i<=encoded.length()-1;i++) {
+			for(int j=0;j<=26;j++) {
+				if(encoded.charAt(i)==alphablets[j]) {
+					decoded.insert(i,(char)'a'+j);
+				}else if(encoded.charAt(i)==alphablets2[j]) {
+					decoded.insert(i,(char)'A'+j);
+				}else if(' '==encoded.charAt(i)) {
+					decoded.insert(i,'_');
+				}
+			}
+		}
+		System.out.println(decoded.toString());
+		this.decoded=new StringBuffer(decoded);
+	}
+	
+
+}

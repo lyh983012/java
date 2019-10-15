@@ -1,0 +1,12 @@
+package main;
+
+public class Net_disk{
+	static main_interface window;
+	
+	public static void main(String[] args)
+	{
+			window = new main_interface();
+			window.get_start();
+	
+	}
+}

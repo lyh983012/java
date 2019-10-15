@@ -1,0 +1,8 @@
+package myaccount.model;
+
+public class tsgt {
+
+	static public void main(String arg[]) {
+	
+	}
+}

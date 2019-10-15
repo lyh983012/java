@@ -1,0 +1,9 @@
+package THUgame.event;
+import THUgame.datapack.DataPack;
+
+public class EventTimeManager extends EventBase{
+	public void actOn(DataPack oldDataPack) {
+		oldDataPack.eventFinished=true;
+	}
+
+}

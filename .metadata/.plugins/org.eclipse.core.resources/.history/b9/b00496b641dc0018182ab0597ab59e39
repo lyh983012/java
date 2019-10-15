@@ -1,0 +1,10 @@
+package computer;
+
+public class test {
+
+	Computer<Integer> Pc1;//范型必须是类类型
+	Computer<Double> Pc2;
+	public void main (String arg[]) {
+		
+	}
+}

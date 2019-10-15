@@ -1,0 +1,202 @@
+package problem4;
+
+public abstract class data_base{
+
+	protected String trade_list[];
+	protected String transfer_list[];
+	protected String touzi_list[];
+	static protected String account_list[];
+	static protected String agency_list[];
+	static int account_number;
+	static int agency_number;
+	static protected double rate[]= {0.00009,0.001,0.002,0.003};
+	protected int auth;
+	protected String account;
+	protected int capacity_of_trade_list;
+	protected int capacity_of_transfer_list;
+	protected int capacity_of_touzi_list;
+	
+	public abstract void print_all_list();
+	public abstract void print_trade_list();
+	public abstract void print_transfer_list();
+	public abstract void print_touzi_list();
+	public void add_account(String temp) {
+		if (this.auth>-1) {
+			account_list[++account_number]=temp;
+				if(account_list.length<account_number*2) {
+					String temp1[]=new String[account_list.length*2];
+					for(int i=0;i<=account_list.length;i++) {
+						temp1[i]=account_list[i];
+					}
+					agency_list=temp1;
+				}
+		}else 
+			System.out.println("you dont have the authority");
+		
+	}
+	public void add_agency(String temp) {
+		if (this.auth>-1) {
+			agency_list[++agency_number]=temp;
+				if(agency_list.length<agency_number*2) {
+					String temp1[]=new String[agency_list.length*2];
+					for(int i=0;i<=agency_list.length;i++) {
+						temp1[i]=agency_list[i];
+					}
+					agency_list=temp1;
+				}
+		}else
+			System.out.println("you dont have the authority");
+	}
+	 data_base(int a)
+	 {	
+		 capacity_of_trade_list=10;
+		 capacity_of_transfer_list=10;
+		 capacity_of_touzi_list=10;
+		 account_number=0;
+		 agency_number=0;
+		 account_list= new String[10];
+		 agency_list= new String[10];
+		 this.trade_list =new String[(int) capacity_of_trade_list];
+		 this.transfer_list =new String[(int) capacity_of_transfer_list];
+		 this.touzi_list =new String[(int) capacity_of_touzi_list];
+		 this.auth=a;
+		 
+	 	}
+	 static public void main(String arg[]) {
+		 touzi_account my = new touzi_account();
+		 
+	 }
+}
+
+class touzi_account extends data_base{
+
+	private double interest_rate;
+	
+	@Override
+	public void print_all_list() {
+		this.print_trade_list();
+		this.print_transfer_list();
+		print_touzi_list();
+	}
+
+	@Override
+	public void print_trade_list() {
+		System.out.println("touzi list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+			}
+	}
+	
+	@Override
+	public void print_transfer_list() {
+		System.out.println("transfer list is:");
+		for(String i:this.transfer_list) {
+			System.out.println(i);
+	}
+	}
+
+	@Override
+	public void print_touzi_list() {
+		System.out.println("trade list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+		}
+	}
+	
+	public void get_acount_list() {
+		if(this.auth>1) {
+			for(int i=0;i<=data_base.account_list.length;i++) 
+				System.out.println(data_base.account_list[i]);
+			}else {
+				System.out.println("you dont have the authority");
+			}
+	}
+
+	public void get_agency_list() {
+		if(this.auth>1) {
+			for(int i=0;i<=data_base.agency_list.length;i++) 
+				System.out.println(data_base.agency_list[i]);
+			}else {
+				System.out.println("you dont have the authority");
+			}
+	}
+
+	touzi_account() {
+		super(0);
+		interest_rate=data_base.rate[0];
+		this.account=this.toString();
+		this.add_agency(this.account);
+	}
+	
+	public void frozen() {this.auth=-1;}
+	
+	public void unforzen() {this.auth=0;}
+		
+}
+
+class manager_account extends data_base{
+
+	private double interest_rate;
+	
+	@Override
+	public void print_all_list() {
+		this.print_trade_list();
+		this.print_transfer_list();
+		print_touzi_list();
+	}
+
+	@Override
+	public void print_trade_list() {
+		System.out.println("all trade list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+			}
+	}
+	
+	@Override
+	public void print_transfer_list() {
+		System.out.println("transfer list is:");
+		for(String i:this.transfer_list) {
+			System.out.println(i);
+	}
+	}
+
+	@Override
+	public void print_touzi_list() {
+		System.out.println("trade list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+		}
+	}
+	
+	public void get_acount_list() {
+		if(this.auth>1) {
+			for(int i=0;i<=data_base.account_list.length;i++) 
+				System.out.println(data_base.account_list[i]);
+			}else {
+				System.out.println("you dont have the authority");
+			}
+	}
+
+	public void get_agency_list() {
+		if(this.auth>1) {
+			for(int i=0;i<=data_base.agency_list.length;i++) 
+				System.out.println(data_base.agency_list[i]);
+			}else {
+				System.out.println("you dont have the authority");
+			}
+	}
+
+	manager_account() {
+		super(10);
+		interest_rate=data_base.rate[0];
+		this.account=this.toString();
+		this.add_agency(this.account);
+	}
+	
+	public void frozen() {this.auth=-1;}
+	
+	public void unforzen() {this.auth=10;}
+		
+	
+}

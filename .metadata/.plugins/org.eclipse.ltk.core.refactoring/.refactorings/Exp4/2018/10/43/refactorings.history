@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;problem4.data_base&apos; to &apos;MyAccount&apos;&#x0A;- Original project: &apos;Exp4&apos;&#x0A;- Original element: &apos;problem4.data_base&apos;&#x0A;- Renamed element: &apos;problem4.MyAccount&apos;&#x0A;- Update references to refactored element&#x0A;- Rename similarly named elements&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;data_base&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;problem4{data_base.java[data_base" matchStrategy="1" name="MyAccount" qualified="false" references="true" similarDeclarations="true" stamp="1540138064540" textual="false" version="1.0"/>
+</session>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;communicate.dataPack2.java&apos; to &apos;dataPack.java&apos;&#x0A;- Original project: &apos;fuwuqi&apos;&#x0A;- Original element: &apos;communicate.dataPack2.java&apos;&#x0A;- Renamed element: &apos;communicate.dataPack.java&apos;" description="Rename compilation unit &apos;dataPack2.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;communicate{dataPack2.java" name="dataPack.java" references="false" stamp="1542891512379" version="1.0"/>
+</session>

@@ -1,0 +1,194 @@
+package template.windows;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import template.datapack.DataPack;
+import template.guitemplate.EventManager;
+import template.listener.DIYMouseListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLayeredPane;
+import java.awt.Canvas;
+import java.awt.Button;
+import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.Box;
+import javax.swing.JEditorPane;
+import javax.swing.JTextPane;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+
+
+/* 	
+ * 绘图类	
+ **/
+class ImagePanel extends JPanel {
+	
+	private String pathOfImage;
+	private int  x1;
+	private int  y1;
+	private int  x2;
+	private int  y2;
+	
+	ImagePanel(String pathOfImage,int x1,int y1,int x2,int y2){
+		this.pathOfImage=pathOfImage;
+		this.x1=x1;
+		this.x2=x2;
+		this.y1=y1;
+		this.y2=y2;
+		this.setBounds(x1, y1, x2, y2);
+	}
+
+	public void paint(Graphics g) {
+		super.paint(g);
+		ImageIcon icon = new ImageIcon(pathOfImage);
+		g.drawImage(icon.getImage(), x1, y1, x2, y2, this);
+	}
+}
+/* 	
+ * 开场情景
+ **/
+public class getUpWin {
+
+	public JFrame frame;
+	public EventManager mainGame;
+	static public DataPack dataPackage;
+	
+	public getUpWin(EventManager mainGame) {
+		this.mainGame=mainGame;
+		frame = new JFrame();
+		frame.setBounds(0, 0, 1080, 720);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JButton btnNewButton = new JButton("继续睡觉");
+		btnNewButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		btnNewButton.setBounds(819, 569, 148, 55);
+		frame.getContentPane().add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("去上课");
+		btnNewButton_1.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		btnNewButton_1.setBounds(812, 477, 155, 55);
+		frame.getContentPane().add(btnNewButton_1);
+		
+		JPanel backgroundPanel=new JPanel();
+		backgroundPanel.setBounds(0, 0, 1080, 720);
+		backgroundPanel.setLayout(null);
+		
+		
+		ImagePanel Background=new ImagePanel("imgsrc//dom.jpg",0, 0, 1080, 720);
+		Background.add(panel);
+		frame.getContentPane().add(Background);
+		Background.setLayout(null);
+		
+		
+		JPanel panel = new ImagePanel("imgsrc//shuxing.jpg",21, 234, 190, 259);
+		panel.setBounds(129, 175, 190, 259);
+		Background.add(panel);
+		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel.setLayout(null);
+		
+		JLabel StudentIDLable = new JLabel("学号");
+		StudentIDLable.setFont(new Font("STFangsong", Font.PLAIN, 13));
+		StudentIDLable.setBounds(26, 78, 32, 16);
+		panel.add(StudentIDLable);
+		
+		JTextPane nameShow = new JTextPane();
+		nameShow.setEditable(false);
+		nameShow.setBounds(86, 42, 62, 16);
+		panel.add(nameShow);
+		
+		JLabel nameLable = new JLabel("姓名");
+		nameLable.setFont(new Font("STFangsong", Font.PLAIN, 13));
+		nameLable.setBounds(26, 42, 32, 24);
+		panel.add(nameLable);
+		
+		JTextPane IDshow = new JTextPane();
+		IDshow.setEditable(false);
+		IDshow.setBounds(86, 78, 62, 16);
+		panel.add(IDshow);
+		
+		JProgressBar healthBar = new JProgressBar();
+		healthBar.setBounds(60, 119, 124, 20);
+		panel.add(healthBar);
+		
+		JProgressBar IQBar = new JProgressBar();
+		IQBar.setBounds(60, 139, 124, 20);
+		panel.add(IQBar);
+		
+		JProgressBar StrongBar = new JProgressBar();
+		StrongBar.setBounds(60, 165, 124, 20);
+		panel.add(StrongBar);
+		
+		JProgressBar happyBar = new JProgressBar();
+		happyBar.setBounds(60, 187, 124, 20);
+		panel.add(happyBar);
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBounds(60, 211, 124, 20);
+		panel.add(progressBar);
+		
+		JLabel labelIQ = new JLabel("智力值");
+		labelIQ.setBounds(6, 142, 52, 16);
+		panel.add(labelIQ);
+		
+		JLabel labelstrong = new JLabel("体力值");
+		labelstrong.setBounds(6, 166, 52, 16);
+		panel.add(labelstrong);
+		
+		JLabel labelshealth = new JLabel("健康值");
+		labelshealth.setBounds(6, 118, 52, 16);
+		panel.add(labelshealth);
+		
+		JLabel label_happy = new JLabel("心   情");
+		label_happy.setBounds(6, 189, 52, 16);
+		panel.add(label_happy);
+		
+		JLabel label_social = new JLabel("社交力");
+		label_social.setBounds(6, 213, 52, 16);
+		panel.add(label_social);
+		IQBar.setValue(dataPackage.characterIQ);
+		progressBar.setValue(dataPackage.characterEQ);
+		StrongBar.setValue(dataPackage.characterStrength);
+		happyBar.setValue(dataPackage.characterHappiness);
+		healthBar.setValue(dataPackage.characterHealth);
+		
+		DIYMouseListener.dataPackage=dataPackage;//数据包注册
+		/*********************************		
+		 * 在用插件绘制完界面之后进行界面内数值设定
+		 * 添加监听器以响应某些动作
+		 * 监听器有模板类
+		 *********************************/
+		/*		START OF YOUR CODE		*/
+	
+		DIYMouseListener clickgotoclass=new DIYMouseListener(0);
+		DIYMouseListener clicksleep=new DIYMouseListener(1);
+
+		clickgotoclass.setGame(mainGame);
+		clicksleep.setGame(mainGame);
+		
+		btnNewButton_1.addMouseListener(clickgotoclass);
+    	btnNewButton.addMouseListener(clicksleep);
+
+		/*		END OF YOUR CODE		*/
+	}
+	public JFrame returnNewFrame() {
+		return frame;
+	}
+}
+
+

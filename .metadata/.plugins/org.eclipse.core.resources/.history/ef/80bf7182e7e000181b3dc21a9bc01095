@@ -1,0 +1,169 @@
+package myaccount.model;
+
+import java.lang.Comparable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.xml.crypto.Data;
+
+
+public abstract class Deal implements Comparable<Deal>{
+
+	Date dealDate= new Date();
+	String dealType;
+	Person person= null;
+	String accoutName=null;
+	String amount = null;
+	String category ="";
+	String description = "";
+	String time;
+	
+	@Override
+	public int compareTo(Deal temp) {
+		if(this.dealDate.getTime()>temp.dealDate.getTime())
+			return 1;
+		else
+			return 0;
+	}
+	abstract public Deal parseString( String deal) ;
+	abstract public String toPlainText();
+	public String getAccoutName() {
+		return null;
+	}
+	public void setAccoutName(String accout) {
+	}
+	public String getAmount() {
+		return null;
+	}
+	public void setAmount(String amount) {
+	}
+	public String getCategory() {
+		return null;
+	}
+	public String setCategory(String category) {
+		return null;
+	}
+	public Date getDealDate() {
+		return null;
+	}
+	public void setDealDate(Date dealDate ) {
+	}
+	public String getDealType() {
+		return null;
+	}
+	public void setDealType(String dealType ) {
+	}
+	public String getDescription() {
+		return null;
+	}
+	public void setDescription(String description ) {
+	}
+	public Person getPerson() {
+		return null;
+	}
+	public void setPerson( Person person) {
+	}
+
+	public Deal(String dealType,String category,Person person,String amount,String time) {
+		this.dealType=dealType;
+		this.person=person;
+		this.amount=amount;
+		this.category=category;
+		this.time=time;
+	}
+	public Deal(String dealType,String category,Person person,String amount,String time,String accoutName) {
+		this.dealType=dealType;
+		this.person=person;
+		this.amount=amount;
+		this.category=category;
+		this.time=time;
+		this.accoutName=accoutName;
+	}
+	static public void main(String arg[]) {
+	
+		}
+	}
+
+
+class TransferDeal extends Deal {
+	Account inputAconut;
+	Account outputAccount;
+	
+	
+	public TransferDeal(Account inputAconut,Person sender,Account outputAccount,String amount) {
+	
+	super("<transfer>","transfer",sender,amount,(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
+	this.inputAconut=inputAconut;
+	this.outputAccount=outputAccount;
+	};
+	
+	public Deal parseString( String deal) 
+	{
+		return null;
+		
+	}
+	public String toPlainText() {
+		return accoutName;
+		
+	}
+	public void getInputAconut() {
+	}
+	public void setInputAconut() {
+	}
+	public void getOutputAconut() {
+	}
+	public void setOutputAconut() {
+	}
+
+
+class NormalDeal extends Deal {
+	
+	public  NormalDeal(String accoutName,Person sender,String amount) {
+		
+	super("<Normal>","Normal",sender,amount,(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()),accoutName);
+	};
+	public Deal parseString( String deal) 
+	{
+		return null;
+	}
+	
+	public String toPlainText() {
+		return accoutName;
+		
+	}
+
+			
+}
+class StockDeal extends Deal {
+	
+	boolean isbuy =true;
+	String stockNumber="";
+	String stockName="";
+	
+	public  StockDeal(Account stockName,String amount,String stockNumber) {
+		super("<Normal>",amount,(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()),stockName);
+		this.stockName=stockName;
+		};
+	public boolean isbuy() {return (Boolean) null;}
+	public void stebuy(boolean yes) {this.isbuy=yes;}
+	public void getstockNumber() {
+	}
+	public void setstockNumber() {
+	}
+	public void getstockName() {
+	}
+	public void setstockName() {
+	}
+	
+	public Deal parseString( String deal) 
+	{
+		return null;
+		
+	}
+	public String toPlainText() {
+		return accoutName;
+		
+	}
+}
+			
+	
+}

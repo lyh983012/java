@@ -1,0 +1,25 @@
+package main;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class Net_disk{
+	
+	static Interface window;
+	
+	
+	public static void main(String[] args)
+	{
+		//javax.swing.SwingUtilities
+			window = new Interface();
+			window.start();
+			
+			ArrayList<String> al=new ArrayList<String>();
+			al.add(123);
+			al.add("hello");
+			al.add("hello");
+			
+			
+	}
+}

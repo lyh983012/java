@@ -1,0 +1,74 @@
+package main;
+
+import gui.*;
+
+import ftp.Down_load;
+import javax.swing.*;
+import communication.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.util.List;
+
+
+public class MainInter {
+
+	static JFrame mainFrame;//这个类只会有一个对象
+	static int  login_state;
+	static int  sign_in_state;
+	static String user_name;
+	static File file;
+	
+	//
+	private int get_into_main(){ 
+		mainFrame = new JFrame("netdisk of "+this.user_name);
+	    mainFrame.setSize(800,400);//Set the frame size
+	    mainFrame.setResizable(false);
+	    mainFrame.setLayout(null);
+	    
+	    JPanel tool=new JPanel();
+	    tool.setLayout(new GridLayout(4,1));
+	    { 
+		    JButton upload = new JButton("upload");
+		    upload.setSize(40,20);
+		    
+		    JButton download = new JButton("download");
+		    download.setSize(40,20);
+		    
+		    JButton setting = new JButton("setting");
+		    setting.setSize(40,20);
+		    
+		    JButton help = new JButton("help");
+		    help.setSize(40,20);
+		    
+		    tool.add(upload);
+		    tool.add(download);
+		    tool.add(setting);
+		    tool.add(help); 
+		    //test_xy(upload);
+		    upload.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 creat_uploading();
+		         }
+		    });
+		    help.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 creat_help_window();
+		         }
+		    });
+	    }
+	    creat_file_tree(mainFrame,200,50);
+        mainFrame.setVisible(true);
+	    tool.setBounds(50, 50, 100, 200); 
+	    mainFrame.add(tool);
+	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainFrame.setVisible(true);
+	   
+
+		return 0;
+					
+		}
+		
+}

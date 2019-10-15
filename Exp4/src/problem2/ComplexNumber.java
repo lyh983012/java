@@ -1,0 +1,42 @@
+package problem2;
+
+public class ComplexNumber {
+	double real = 0;
+	double imagine = 0;
+	public ComplexNumber(double real, double imagine) { this.real = real;
+	this.imagine = imagine; }
+	public ComplexNumber minus(ComplexNumber operand) {
+	return new ComplexNumber(this.real - operand.real, this.imagine- operand.imagine);
+	}
+public boolean equals(final ComplexNumber temp)
+	{
+	if(temp instanceof ComplexNumber){
+		if((this.real-temp.real)<0.00001 && 
+			(this.real-temp.real)>-0.00001 && 
+			(this.imagine-temp.imagine)<0.00001 && 
+			(this.imagine-temp.imagine)>-0.00001
+				)
+		return true;
+	}
+	return false;
+
+}
+	
+	
+public static void main(String[] args) {
+	ComplexNumber complex1 = new ComplexNumber(2.02d, 3.1d); 
+	ComplexNumber complex2 = new ComplexNumber(2d, 3d);
+	ComplexNumber complex3 = complex2;
+	ComplexNumber complex4 = new ComplexNumber(2d, 3d);
+	ComplexNumber complex5 = new ComplexNumber(0.02d, 0.1d); 
+	ComplexNumber complex6 = complex1.minus(complex2);
+	System.out.println(complex2 == complex3);
+	System.out.println(complex2.equals(complex3));
+	System.out.println(complex2.equals(complex4));
+	System.out.println(complex6.equals(complex5)); 
+	System.out.println(complex1.equals(null)); 
+	System.out.println(complex1.equals(new String("abc")));
+	//发现：equals比较的是对象是否是同一个而非对象中对应的元素是否相等
+	}
+}
+

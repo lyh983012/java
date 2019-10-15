@@ -1,0 +1,68 @@
+package myaccount.model;
+
+import java.util.Random;
+
+
+
+public class tsgt {
+
+	static public void main(String arg[]) {
+	String[]	 DealType= {"stock","normal","transfer"};
+	String[]	 category= {"stock","normal","transfer"};
+	
+	Deal deals[]=new Deal[10];
+	Random rand = new Random();
+	int choose;
+	for(int i=0;i<10;i++){
+		choose=rand.nextInt(1001)%3;
+		Integer amount2=rand.nextInt(1000000);
+		Integer amount1=rand.nextInt(10);
+		if(choose ==0) {
+			deals[i]=new TransferDeal(new FixedtAccount(),new Person("bob"+amount1.toString()),new FixedtAccount(),amount1.toString());
+		}
+		else if(choose ==1) {
+			deals[i]=new NormalDeal("what?",new Person("catlin"+amount2.toString()),amount2.toString());
+		}
+		else if(choose ==2) {
+			 deals[i]=new StockDeal("what?",amount2.toString(),amount2.toString(),new Person("Kate"+amount2.toString())) ;
+		}
+	}
+	for(int i=0;i<10;i++) {
+		System.out.println(deals[i].toPlainText());
+	}
+	System.out.println(" ");
+	System.out.println("swap");
+	System.out.println(" ");
+	
+	for(int i=0;i<100;i++) {
+			swap(deals,rand.nextInt(10),rand.nextInt(10));
+	}
+	for(int i=0;i<10;i++) {
+		System.out.println(deals[i].toPlainText());
+	}
+	
+	System.out.println(" ");
+	System.out.println("sort");
+	System.out.println(" ");
+	
+	for(int i=0;i<10;i++) {
+		for(int j=i;j<10;j++) {
+			if(deals[i].compareTo_money(deals[j])==1) 
+				swap(deals,i,j);
+		}
+	}
+	for(int i=0;i<10;i++) {
+		System.out.println(deals[i].toPlainText());
+	}
+}
+	
+	public static void swap(Deal[] deals,int i ,int j) {
+		Deal temp=deals[i];
+		deals[i]=deals[j];
+		deals[j]=temp;
+		
+	}
+}
+
+
+

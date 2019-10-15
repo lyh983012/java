@@ -1,0 +1,64 @@
+package main_interface;
+import java.awt.*;
+import java.io.File;
+import javax.swing.*;
+import communication.Communicator;
+
+public class logWin extends Menu{
+	
+	File _file;
+	File _address;
+	public String user_name;
+	public int  login_state;
+	public int  sign_in_state;
+	
+	//创建成功窗口
+	protected void creat_success_window(){
+		JFrame sus =new JFrame("success");
+		sus.setSize(200,20);
+		sus.setVisible(false);
+		JOptionPane.showMessageDialog(null, "success！");  
+		try
+		{
+		Thread.currentThread().sleep(1000);//毫秒
+		}
+		catch(Exception e){}
+		sus.dispose();
+		
+	}
+	//创建失败窗口
+	protected void creat_wrong_window(){
+		JFrame sus =new JFrame("Wrong");
+		sus.setSize(200,20);
+		sus.setVisible(false);
+		JOptionPane.showMessageDialog(null, "Wrong！");  
+		try
+		{
+		Thread.currentThread().sleep(1000);//毫秒
+		}
+		catch(Exception e){}
+		sus.dispose();
+	}
+	//创建任意提示窗口
+	protected void creat_warning_window(String massage){
+
+		JFrame sus =new JFrame("warning");
+		sus.setSize(200,20);
+		sus.setVisible(false);
+		JOptionPane.showMessageDialog(null,massage);  
+		try
+		{
+		Thread.currentThread().sleep(1000);//毫秒
+		}
+		catch(Exception e){}
+		sus.dispose();
+		
+	}
+	
+
+	protected int check_login_state() {
+		return login_state;
+	}
+
+	
+}

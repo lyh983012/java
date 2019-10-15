@@ -1,0 +1,15 @@
+package main;
+
+public class Net_disk{
+	
+	static Interface window;
+	
+	
+	public static void main(String[] args)
+	{
+		javax.swing.SwingUtilities
+			window = new Interface();
+			window.start();
+	
+	}
+}

@@ -1,0 +1,28 @@
+package computer;
+
+public class test {
+
+	public static void main (String arg[]) {
+		Double test1=new Double(3.12131231);
+		Integer test2=new Integer(3);
+		
+		Computer<Integer> Pc1= new Computer<Integer>();//范型必须是类类型 Interger
+		Pc1.plus(test2);
+		Pc1.getresult();
+		
+		Computer<Double> Pc2= new Computer<Double>();//范型必须是类类型 Double
+		Pc2.plus(test1);
+			Pc2.getresult();
+		Pc2.time(test1);
+			Pc2.getresult();
+		Pc2.minus(test1);
+			Pc2.getresult();
+		Pc2.divide(test1);
+			Pc2.getresult();
+		Pc2.pow(test1);
+			Pc2.getresult();
+		Pc2.divide(test1);
+			Pc2.getresult();
+		
+	}
+}

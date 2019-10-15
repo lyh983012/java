@@ -1,0 +1,199 @@
+package main_interface;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.*;
+import javax.swing.tree.*;
+
+import communication.Communicator;
+
+public class Main_general extends JFrame {
+
+
+	private File _file;
+	private File _address;
+	public String user_name;
+	private JPanel contentPane;
+
+	public static void main(String args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Main_general frame = new Main_general(args);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	static public void run(String name){
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Main_general frame = new Main_general(name);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+
+	public Main_general(String n) {
+		super(n);
+		user_name=n;
+		Main_general mainFrame=this;
+	    mainFrame.setSize(800,400);//Set the frame size
+	    mainFrame.setResizable(false);
+	    mainFrame.getContentPane().setLayout(null);
+	    JPanel tool=new JPanel();
+	    JPanel Tree=new JPanel();
+	    JToolBar toolbar = new JToolBar();
+	    
+	    tool.setLayout(new GridLayout(4,1));
+	    { 
+		    JButton upload = new JButton("上传文件");
+		    upload.setSize(40,20);
+		    
+		    JButton download = new JButton("下载文件");
+		    download.setSize(40,20);
+		    
+		    JButton setting = new JButton("设置");
+		    setting.setSize(40,20);
+		    
+		    JButton help = new JButton("一些帮助");
+		    help.setSize(40,20);
+		    
+		    
+		    tool.add(upload);
+		    tool.add(download);
+		    tool.add(setting);
+		    tool.add(help); 
+		    	tool.setBackground(Color.PINK);
+		    	tool.setBorder(BorderFactory.createLoweredBevelBorder());
+		    upload.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 uploadWin.run(creat_test_tree(), user_name);
+		         }
+		    });
+		    help.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 helpWin.main(user_name);
+		         }
+		    });
+	    }
+	    creat_file_tree(Tree,creat_test_tree(),200,50);
+	    mainFrame.getContentPane().add(Tree);
+ 
+	    tool.setBounds(51, 79, 111, 211); 
+	    mainFrame.getContentPane().add(tool);
+	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainFrame.setVisible(true);
+
+	}
+
+	//创建成功窗口
+	protected void creat_success_window(){
+		JFrame sus =new JFrame("success");
+		sus.setSize(200,20);
+		sus.setVisible(false);
+		JOptionPane.showMessageDialog(null, "success！");  
+		try
+		{
+		Thread.currentThread().sleep(1000);//毫秒
+		}
+		catch(Exception e){}
+		sus.dispose();
+		
+	}
+	//创建失败窗口
+	protected void creat_wrong_window(){
+		JFrame sus =new JFrame("Wrong");
+		sus.setSize(200,20);
+		sus.setVisible(false);
+		JOptionPane.showMessageDialog(null, "Wrong！");  
+		try
+		{
+		Thread.currentThread().sleep(1000);//毫秒
+		}
+		catch(Exception e){}
+		sus.dispose();
+	}
+	//创建任意提示窗口
+	protected void creat_warning_window(String massage){
+
+		JFrame sus =new JFrame("warning");
+		sus.setSize(200,20);
+		sus.setVisible(false);
+		JOptionPane.showMessageDialog(null,massage);  
+		try
+		{
+		Thread.currentThread().sleep(1000);//毫秒
+		}
+		catch(Exception e){}
+		sus.dispose();
+		
+	}
+	
+	//通过受到的文件树创建
+	protected void creat_file_tree(JPanel panel,JTree filetree, int x,int y){
+
+	        panel.setLayout(new BorderLayout());	        
+	        // 设置树显示根节点句柄
+	        filetree.setShowsRootHandles(true);
+	        // 设置树节点可编辑
+	        filetree.setEditable(true);
+	        // 设置节点选中监听器
+	        filetree.addTreeSelectionListener(new TreeSelectionListener() {
+	            @Override
+	            public void valueChanged(TreeSelectionEvent e) {
+	                System.out.println("当前被选中的节点: " + e.getPath());
+	            }
+	        });
+	        // 创建滚动面板，包裹树（因为树节点展开后可能需要很大的空间来显示，所以需要用一个滚动面板来包裹）
+	        JScrollPane scrollPane = new JScrollPane(filetree);
+	        // 添加滚动面板到那内容面板
+	        panel.add(scrollPane, BorderLayout.CENTER);
+	        panel.setBounds(x, y, 400, 300); 
+	        // 设置窗口内容面板并显示
+	    }
+
+	//创建上传窗口
+	//创建帮助窗口
+
+	protected JTree creat_test_tree() {
+		// 创建根节点
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("file0");
+        // 创建二级节点
+        DefaultMutableTreeNode Node1 = new DefaultMutableTreeNode("file1");
+        DefaultMutableTreeNode Node2 = new DefaultMutableTreeNode("file2");
+        DefaultMutableTreeNode Node3 = new DefaultMutableTreeNode("file3");
+        // 把二级节点作为子节点添加到根节点
+        rootNode.add(Node1);
+        rootNode.add(Node2);
+        rootNode.add(Node3);
+        // 创建三级节点
+        DefaultMutableTreeNode gzNode = new DefaultMutableTreeNode("text.txt");
+        DefaultMutableTreeNode szNode = new DefaultMutableTreeNode("mp3.mp3");
+        DefaultMutableTreeNode fzNode = new DefaultMutableTreeNode("song.wav");
+        DefaultMutableTreeNode xmNode = new DefaultMutableTreeNode("class.ppt");
+        // 把三级节点作为子节点添加到相应的二级节点
+        Node1.add(gzNode);
+        Node2.add(szNode);
+        Node3.add(fzNode);
+        Node3.add(xmNode);
+        // 使用根节点创建树组件
+        JTree tree = new JTree(rootNode);
+        tree.setBackground(new Color(240, 255, 240));
+        return tree;
+	}
+}

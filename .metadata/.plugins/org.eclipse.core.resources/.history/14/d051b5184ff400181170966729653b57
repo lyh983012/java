@@ -1,0 +1,332 @@
+package communicate;
+import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+
+import javax.swing.JButton;
+import javax.swing.JProgressBar;
+import javax.swing.JTree;
+
+
+import java.io.*;
+
+public class cs_service 
+{
+
+	
+    public static void main(String[] args) throws IOException 
+    {
+    
+        ServerSocket ss = new ServerSocket(30000);//是一个能够接受其他通信实体请求的类
+        System.out.println("---waiting----");
+        //用一个while循环可以同时响应多个客户端的请求
+        while(true){
+             Socket sk= ss.accept();//服务器监听对应端口的输入
+             ServerThread  st = new ServerThread(sk);//创建一个线程，用线程创建一个套接字
+         	try {
+             st.start(); 
+        		}catch(Exception e) {
+        			BufferedWriter bw=null;
+		        bw= new BufferedWriter(new OutputStreamWriter(sk.getOutputStream()));
+		        bw.write("Illegal request");
+		        bw.close();
+        		}
+        } 
+    }
+}
+//服务器线程类
+	
+class ServerThread extends Thread
+	{
+	  	Socket sk;
+		static String wrong_statement="___wrong___@lyh";
+		static String right_statement="___right___@lyh";
+		static String help_statement="___help___@lyh";
+	    static String web_statement="___web___@lyh";
+		static String time_statement="___time___@lyh";
+		static String getmem_statement="___getmem___@lyh";
+		static String checkspace_statement="___checkspace___@lyh";
+		static String sign_statement="___sign___@lyh";
+		static String log_statement="___log___@lyh";
+		static String text_statement="___text___@lyh";
+		static String file_statement="___file___@lyh";
+		static String updatetree_statement="___updatetree___@lyh";
+		static String download_statement="___download___@lyh";
+		
+		int wait_time=1000;
+		int port=30000;
+		private boolean wrong_flag=false;
+		public String ip_address="ordinarabbit.imwork.net";
+		
+	  public ServerThread(Socket sk){
+		  	this.sk= sk;
+	  		}
+	  public String read_mass(BufferedReader br) {
+			String mass2="";
+			try {
+		        int flag=1;
+		        long begin_time = System.currentTimeMillis();
+		        while( !br.ready() ) {
+		        		if (System.currentTimeMillis()-begin_time>wait_time){
+		        			flag=0;
+		        			break;
+		        		}
+		        };
+		        if(flag==1){
+		        	mass2=br.readLine();
+		        }else {
+		        br.close();
+		        	mass2=wrong_statement;
+		        	System.out.println("服务器无响应");
+		        }
+			}catch(Exception e) {}
+				return mass2;
+		}
+	  public void send_mass(PrintStream ps,String mass) {
+			String mass2="";
+		   try{
+		       
+		        ps.println(mass);   
+		        ps.close();//关闭输出流包装
+		        }catch(Exception e) {
+		        	System.out.println(">>>???<<<");
+		        	e.printStackTrace();
+		        mass2=wrong_statement;
+		        }
+		   }
+
+	  @Override
+	  public void run() {     
+		  try { 
+		  dataPack redata=new dataPack();
+		  InputStream in = sk.getInputStream();  
+		  BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		  PrintStream  ps = new PrintStream(sk.getOutputStream());
+		  String temp=read_mass(br);
+		  redata.toDatapack(temp);
+	      String checkcode=redata.getcheckCode();
+	      String username = redata.getBody_nth(0);  
+	      String ip = redata.getBody_nth(1);  
+	      String time = redata.getBody_nth(2);  
+	      
+	     
+	      System.out.println("来自客户端的数据："+redata.getBody()); 
+	      System.out.println("命令是："+checkcode);
+	      
+	      if (checkcode.compareTo(time_statement)==0) { 		//时间
+	    	  		re_time(ps,username);
+	      }else if (checkcode.compareTo(help_statement)==0) {//帮助
+	    	  		re_help(ps,username);
+	      }else if (checkcode.compareTo(web_statement)==0) {//网站
+	    	  		re_web(ps,username);
+	      }else if(checkcode.compareTo(sign_statement)==0){ //注册
+	    	  		re_sign(redata,ps,username);
+	      }else if(checkcode.compareTo(log_statement)==0){  //登录
+	    	  		re_log(redata,ps,username);	
+	      }else if (checkcode.compareTo(text_statement)==0) { //任意文本
+	    	  		re_text(ps,username);
+	      }else if(checkcode.compareTo(file_statement)==0) {
+	    	  		re_file(redata,ps,in,username);
+	      }else if(checkcode.compareTo(updatetree_statement)==0) {
+	    	  		se_tree(ps,username,redata);
+	      }else if(checkcode.compareTo(file_statement)==0) {
+	    	  		//se_file(redata,ps,in,username);
+	      }
+  	  	br.close();
+  	  	ps.close();
+	      }
+	      catch(	Exception e){
+	          e.printStackTrace();
+	      }
+	  }
+	    		 
+	  private void re_time(PrintStream ps,String username) {
+		  dataPack data=new dataPack();
+	  		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式  
+	  		data.addBody(df.format(new Date()));
+	  		data.setcheckCode(time_statement);
+	  		send_mass(ps,data.toString());
+	  }
+	  
+	  private void re_help(PrintStream ps,String username) {
+		  	dataPack data=new dataPack();
+	  		data.addBody("please call 18801302019");
+	  		data.setcheckCode(help_statement);
+	  		send_mass(ps,data.toString());
+	  }
+	  
+	  private void re_web(PrintStream ps,String username) {
+
+		dataPack data=new dataPack();
+	  	data.addBody("ordinarabbit.imwork.net");
+	  	data.addBody(" if you want to visit my website, use the 55649 port");
+	 	send_mass(ps,data.toString());
+	  }
+	
+	  private void re_sign(dataPack redata,PrintStream ps,String username) throws IOException {
+		  dataPack data=new dataPack();
+  	  	String name=redata.getBody_nth(3);
+  	  	String password=redata.getBody_nth(4);
+		
+  	  	if (name.compareTo("admin")==0 && password.compareTo("admin")==0) {
+  	  		data.setcheckCode(right_statement);
+  	  		data.addBody("admin_user");
+  	  		File start=new File("/home/pi/Desktop/nedisk/"+username);
+  	  		if(!start.exists())
+  	  			start.createNewFile(); 		
+  	  	}else if (name.compareTo("general")==0 && password.compareTo("general")==0) {
+  	  		data.setcheckCode(right_statement);
+  	  		data.addBody("general_user");
+  	  		File start=new File("/home/pi/Desktop/nedisk/"+username);
+  	  			if(!start.exists())
+  	  				start.createNewFile();
+	  		
+  	  	}else {
+  	  		data.setcheckCode(wrong_statement);
+  	  		data.addBody("no_user");
+  	  	}
+  	  	send_mass(ps,data.toString());
+	  }
+	  
+	  private void re_log(dataPack redata,PrintStream ps,String username) throws IOException {
+		dataPack data=new dataPack();
+  	  	String name=redata.getBody_nth(3);
+  	  	String password=redata.getBody_nth(4);  
+  	  	if (name.compareTo("admin")==0 && password.compareTo("admin")==0) {
+  	  		data.setcheckCode(right_statement);
+  	  		data.addBody("admin_user");
+  	  		File start=new File("/home/pi/Desktop/nedisk/"+username);
+  	  		if(!start.exists())
+  	  			start.createNewFile(); 		
+  	  	}else if (name.compareTo("general")==0 && password.compareTo("general")==0) {
+  	  		data.setcheckCode(right_statement);
+  	  		data.addBody("general_user");
+  	  		File start=new File("/home/pi/Desktop/nedisk/"+username);
+  	  		if(!start.exists())
+  	  			start.createNewFile(); 		
+  	  	}else {
+  	  		data.setcheckCode(wrong_statement);
+  	  		data.addBody("no_this_user");
+  	  	}
+  	  	send_mass(ps,data.toString());
+	  }
+	  
+	  private void re_text(PrintStream ps,String username) {
+		  	dataPack data=new dataPack();
+	  		data.addBody(" hello ");
+	  		data.addBody(" your text has been received by manager  ");
+	  		send_mass(ps,data.toString());
+	  }
+	  
+	  private void re_file(dataPack redata,PrintStream ps, InputStream in,String username) throws IOException {
+		  	  dataPack data=new dataPack();
+	  		  Socket fileLoaderSocket = sk;  
+		      SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式  
+		      String des="/home/pi/Desktop/nedisk/"+username+File.separator;
+		      //File _file=new File(des+df.format(new Date())+redata.getBody_nth(3)+redata.getBody_nth(4));
+		      //  String des="/Users/lyh/Desktop"+File.separator+username+File.separator;
+		      File _file=new File(des+df.format(new Date())+redata.getBody_nth(4));
+		      if(!_file.exists()){    
+		    	  	_file.createNewFile();
+		      }
+		      OutputStream fileSave = new FileOutputStream(_file);  
+		      byte[] buf = new byte[1024];  
+		      int len = 0;  //判断是否读到文件末尾
+		         while((len=in.read(buf)) != -1) 
+		           {  
+		            fileSave.write(buf, 0, len);  
+		            fileSave.flush();   //刷新
+		           }  
+		        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fileLoaderSocket.getOutputStream())); 
+		        data.addBody("文件上传成功");
+		        data.setcheckCode(file_statement);
+		        out.flush();  		          //刷新
+		        fileLoaderSocket.close();  		          //资源关闭  
+		        fileSave.close();  
+	  }
+	
+	  private void se_tree(PrintStream ps,String username,dataPack redata) throws IOException {
+		    JTree user_tree=FileTree.creat_filetree(username) ;
+		    ObjectOutputStream OO = new ObjectOutputStream(new FileOutputStream(new File("/home/pi/Desktop/Jtree/"+username)));
+		    OO.writeObject(user_tree);
+	  		sendFile(new File("/home/pi/Desktop/Jtree/"+username),"",redata.getBody_nth(1), username);
+	  }
+	  
+	  public boolean sendFile(File _file,String aimadress,String usersip_address,String user_name) {
+		 
+		  	dataPack data=new dataPack();
+			data=new dataPack();
+			data.setcheckCode(file_statement);
+			data.addBody(user_name);//第一个参数改为username
+			data.addBody(Get_IP());
+			data.addBody(Get_TIME());
+			data.addBody(aimadress);
+			data.addBody(_file.getName());
+			long _filesize=_file.length();
+			long _progress=0;
+			System.out.println(data.toString());
+			Socket filesk=null;
+			InputStream fileRead=null;
+			try {
+			 filesk =new Socket( usersip_address, port);
+			 OutputStream out = filesk.getOutputStream();  
+			 fileRead = new FileInputStream(_file);  
+			 PrintStream ps = new PrintStream(out);
+			 ps.println(data.toString());
+			 ps.flush();
+			 Thread.sleep(200);
+			 byte[] buf = new byte[1024];  
+			 int len = 0; 
+			 while((len=fileRead.read(buf)) != -1)
+			          {  
+			           out.write(buf, 0, len); 
+			           _progress+=len;
+			          }  
+			 filesk.shutdownOutput();  
+			      //获取从服务端反馈的信息  
+			 BufferedReader in = new BufferedReader(new InputStreamReader(filesk.getInputStream()));  
+			 String serverBack = in.readLine();  
+			 System.out.println(serverBack);    
+			      //资源关闭  
+			 filesk.close();  
+			 ps.close();
+			 fileRead.close();
+			}catch(Exception e) {
+			
+			}
+			return wrong_flag;  
+		   }
+			  
+	  
+	  private boolean check_name(String line) {
+		   return true;
+	   }
+	  private boolean check_password(String line) {
+		   return true;
+	   }
+	  
+		//完成：内部方法，获取本机ip
+		private String Get_IP() {
+			String thisIP = null;
+			try
+			{ 
+				thisIP=""+InetAddress.getLocalHost();
+			} catch (UnknownHostException e)
+			{ 
+			e.printStackTrace();
+			}
+			return thisIP;
+
+		}
+		//完成：内部方法，获取本机时间
+		private String Get_TIME() {
+			String thisTIME = null;
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			thisTIME=df.format(new Date());
+			return thisTIME;
+
+		}
+		
+	}
+

@@ -1,0 +1,28 @@
+package main;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Net_disk{
+	
+	static Interface window;
+	
+	
+	public static void main(String[] args)
+	{
+		//javax.swing.SwingUtilities
+			window = new Interface();
+			window.start();
+			
+			FileWriter fw=null;
+			try {
+				fw = new FileWriter("in.txt");
+				fw.write("helllo");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				fw.close();
+			}
+	}
+}

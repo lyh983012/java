@@ -1,0 +1,55 @@
+package problem4;
+
+public abstract class data_base{
+
+	protected String trade_list[];
+	protected String transfer_list[];
+	protected String touzi_list[];
+	
+	
+	protected long capacity_of_trade_list;
+	protected long capacity_of_transfer_list;
+	protected long capacity_of_touzi_list;
+	
+	public abstract void print_all_list();
+	public abstract void print_trade_list();
+	public abstract void print_transfer_list();
+	public abstract void print_touzi_list();
+	
+	private long account;
+}
+
+class current_account extends data_base{
+
+	private double interest_rate;
+	
+	@Override
+	public void print_all_list() {
+		this.print_trade_list();
+		this.print_transfer_list();
+		print_touzi_list();
+	}
+
+	@Override
+	public void print_trade_list() {
+		System.out.println("touzi list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+			}
+	}
+
+	@Override
+	public void print_transfer_list() {
+		System.out.println("transfer list is:");
+		for(String i:this.transfer_list) {
+			System.out.println(i);
+	}
+
+	@Override
+	public void print_touzi_list() {
+		System.out.println("trade list is:");
+		for(String i:this.trade_list) {
+			System.out.println(i);
+	}
+}
+}

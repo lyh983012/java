@@ -1,0 +1,212 @@
+package THUgame.Game;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import THUgame.Game.AnimatePanel.Bullet;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import javax.swing.JButton;
+
+
+
+public class GamePanelTest{
+	
+	JFrame frame;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GamePanelTest window = new GamePanelTest();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/*************************************************************	
+	 * 【构造函数】
+	 * 不要新建JFrame窗口对象，而是把上层传进来的窗口对象里面的东西扔了，重新添加
+	 *************************************************************/
+	public GamePanelTest() {
+		
+		JFrame frame=new JFrame();
+		frame.setBounds(0, 0, 1080, 720);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);		
+		/*************************************************************	
+		 * 背景镶板，所有的组件都在里面
+		 * 两个按钮直接用插件拖进去的
+		 * 这一部分按照流程做的话就会自然消失的，推荐直接在可视化界面编辑属性
+		 * 最后放一下背景
+		 *************************************************************/
+		JPanel backgroundPanel=new JPanel();
+		backgroundPanel.setBackground(new Color(0, 0, 0));
+		backgroundPanel.setBounds(0, 0, 1080, 720);
+		backgroundPanel.setLayout(null);
+
+		JPanel EventPanel = new AnimatePanel(1000);//将来可以用它来放临时小事件
+		EventPanel.setBackground(new Color(255, 255, 204));
+		EventPanel.setBounds(254, 134, 536, 398);
+		backgroundPanel.add(EventPanel);
+		EventPanel.setLayout(null);
+
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(backgroundPanel);
+		frame.getContentPane().repaint();
+		frame.setVisible(true);
+	}
+}
+
+
+class AnimatePanel extends JPanel implements MouseListener,MouseMotionListener{
+	Timer timer;
+    private JButton HeroNewButton;
+    int score=0;
+	int stopTime;
+	int timeLeft=0;
+    int Ex,Ey;
+    int Hx,Hy;
+    ArrayList<Bullet> Bullets;
+    
+	class Bullet extends JButton{
+		boolean correct;
+		int dx,dy;
+		public Bullet(){
+			Random r = new Random();
+			dx = r.nextInt(10) - 5;
+			dy = r.nextInt(8) + 1;
+			this.setText("try");
+			this.correct=true;
+		}
+	}
+
+    public AnimatePanel(int delay) {
+    	this.timeLeft=300;
+    	Bullets=new ArrayList<Bullet>();
+        timer = new Timer(delay, (ActionListener) this);
+        timer.start();
+        addMouseListener(this);  
+        addMouseMotionListener(this); 
+        this.HeroNewButton = new JButton("Hero");
+		this.HeroNewButton.setBounds(240, 266, 50, 50);
+		this.add(HeroNewButton);
+		this.setVisible(true);
+    }
+    
+    private boolean checkHit(int ex,int ey,int hx,int hy) {
+    	if(Math.abs(ex-hx)<50 && Math.abs(ey-hy)<50)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public void paintComponent(Graphics g) {
+    	
+        super.paintComponent(g);
+        this.timeLeft-=1;
+        Hx=this.HeroNewButton.getX();
+        Hy=this.HeroNewButton.getY();
+		Random r = new Random();
+		int randomValue = r.nextInt(8);
+        if(randomValue<1) {
+        	Bullet newBullet=new Bullet();
+        	Bullets.add(newBullet);
+        	this.add(newBullet);
+        	newBullet.setBounds(250,0,50,20);
+        }
+        Iterator<Bullet> iter = Bullets.iterator();
+        while (iter.hasNext()) {
+        	Bullet word = iter.next();
+        	Ex=word.getX();
+        	Ey=word.getY();
+        	if(checkHit(Ex,Ey,Hx,Hy)) {
+        		if(word.correct==true) {
+        			score+=1;
+        		}else {
+        			score-=2;
+        		}
+        		this.remove(word);
+        		iter.remove();
+            }else {
+            	word.setBounds(Ex+word.dx,Ey+word.dy,50,20);
+            	if(Ex>536 || Ex<0 || Ey>398) {
+            		this.remove(word);
+            		iter.remove();
+            	}
+            }
+        }
+        g.drawString("你的得分："+String.valueOf(score),10,10);
+        g.drawString("剩余时间："+String.valueOf(this.timeLeft/10)+"s",10,30);
+        if(this.timeLeft<0) {
+        	timer.stop();
+        	g.drawString("游戏结束，你的得分："+String.valueOf(score),250,200);
+        }
+    }
+
+    class TimerListener implements ActionListener {
+        /** Handle ActionEvent */
+        public void actionPerformed(ActionEvent e) {
+            repaint();
+        }
+    }
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		this.HeroNewButton.setBounds(e.getX()-25,e.getY()-50, 50, 50);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+

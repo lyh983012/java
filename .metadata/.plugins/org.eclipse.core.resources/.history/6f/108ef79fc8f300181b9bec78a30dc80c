@@ -1,0 +1,156 @@
+package main_interface;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.tree.TreePath;
+
+import communication.Communicator;
+
+public class uploadWin extends JFrame {
+	
+	private File _file;
+	private File _address;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(JTree Filetree,String name) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					uploadWin frame = new uploadWin(Filetree,name);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	public static void run(JTree Filetree,String name) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					uploadWin frame = new uploadWin(Filetree,name);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	/**
+	 * Create the frame.
+	 */
+	public uploadWin(JTree Filetree,String name) {
+		  JFrame submainFrame;
+		   JLabel headerLabel;
+		   JLabel subheaderLabel;
+		   JLabel statusLabel;
+		   JLabel statusLabel2;
+		   JPanel controlPanel;
+		   JPanel controlPanel2;
+		   Communicator sender =new Communicator(name);
+		   JButton AddressButton = new JButton("选择地址");
+		   JButton showFileDialogButton = new JButton("选择文件");
+		   JButton send = new JButton("发送");
+		   
+		   submainFrame = new JFrame("文件上传窗口");
+		   submainFrame.setSize(400,600);
+		   submainFrame.getContentPane().setLayout(new GridLayout(7, 1));
+		   headerLabel = new JLabel("", JLabel.CENTER);     
+		   subheaderLabel = new JLabel("", JLabel.CENTER); 
+		   statusLabel = new JLabel("",JLabel.CENTER); 
+		   statusLabel2 = new JLabel("",JLabel.CENTER); 
+		   
+		   statusLabel.setSize(350,30);
+		   statusLabel2.setSize(350,30);
+		   
+		   controlPanel = new JPanel();
+		   controlPanel.setLayout(new FlowLayout());
+		   
+		   controlPanel2 = new JPanel();
+		   controlPanel2.setLayout(new FlowLayout());
+		   
+		   headerLabel.setText("选择你需要上传的文件"); 
+		   subheaderLabel.setText("选择上传文件");
+		   
+		   controlPanel.add(showFileDialogButton);
+		   controlPanel2.add(AddressButton);
+		   controlPanel2.add(send);
+		   
+		   JProgressBar upProgress = new JProgressBar();
+		   upProgress.setBorderPainted(true);
+		   upProgress.setString("上传进度");
+		   upProgress.setStringPainted(true);
+		   upProgress.setIndeterminate(false);
+		   upProgress.setSize(200,30);
+		   
+		   submainFrame.getContentPane().add(headerLabel);
+		   submainFrame.getContentPane().add(subheaderLabel);
+		   submainFrame.getContentPane().add(controlPanel);
+		   submainFrame.getContentPane().add(statusLabel);
+		   submainFrame.getContentPane().add(controlPanel2);
+		   submainFrame.getContentPane().add(statusLabel2);
+		   submainFrame.getContentPane().add(upProgress);
+		   
+		   JFileChooser  fileDialog = new JFileChooser();
+		   JFileChooser addressChooser=new JFileChooser();  
+			 
+		   showFileDialogButton.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		            int return1 = fileDialog.showOpenDialog(submainFrame);
+		            if (return1 == JFileChooser.APPROVE_OPTION) {
+		            	   _file = fileDialog.getSelectedFile();//进入java io file 缓存流
+		               statusLabel.setText("选择了文件 :" + _file.getName());
+		            }
+		            else{
+		               statusLabel.setText("Open command cancelled by user." );           
+		            }      
+		         }
+		      });
+		   AddressButton.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 	JDialog j = new JDialog();
+		     		j.setVisible(true);
+		     		j.getContentPane().setLayout(new FlowLayout());
+		     		j.getContentPane().add(Filetree);
+		     		JButton button = new JButton("选中");
+		     		j.getContentPane().add(button);
+		     		button.addActionListener(new ActionListener() {
+		     			@Override
+		     			public void actionPerformed(ActionEvent e) {		
+		     	             TreePath path = (TreePath) Filetree.getLastSelectedPathComponent();
+		     	             System.out.println(path.toString());   //路径
+		     	             _address=new File(path.toString());
+		     	             j.dispose();
+		     			}
+		     		});
+		            if (_address!=null && _address.isDirectory()) {
+		               statusLabel2.setText("选择了地址 :"+ _address);
+		            }
+		            else{
+		               statusLabel2.setText("Open command cancelled by user." );           
+		            }      
+		         }
+		      });
+
+		   send.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		           if(_file!= null && _address!=null) {
+		        	   sender.sendFile(_file, _file.getPath(), _address.getPath(),upProgress,send);
+		           }
+		         }
+		      });
+
+		   submainFrame.setVisible(true);  
+		}
+}
+

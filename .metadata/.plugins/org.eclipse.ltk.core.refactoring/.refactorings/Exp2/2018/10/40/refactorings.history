@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;problem1.package-info.java&apos; to &apos;FractionTester.java&apos;&#x0A;- Original project: &apos;Exp2&apos;&#x0A;- Original element: &apos;problem1.package-info.java&apos;&#x0A;- Renamed element: &apos;problem1.FractionTester.java&apos;" description="Rename compilation unit &apos;package-info.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;problem1{package-info.java" name="FractionTester.java" references="false" stamp="1538812654897" version="1.0"/>
+</session>

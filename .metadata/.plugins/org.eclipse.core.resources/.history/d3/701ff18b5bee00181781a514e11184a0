@@ -1,0 +1,359 @@
+package main;
+
+import gui.*;
+
+import ftp.Down_load;
+import javax.swing.*;
+import communication.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.util.List;
+
+public class Interface{
+	
+	Login login_window;
+	MainInter main_window;
+	
+	public void start() {
+		main_window=new MainInter();
+		login_window=new Login(main_window);
+		login_window.creat();
+		}
+}
+
+class Login extends speWin
+{
+	JFrame mainFrame;//这个类只会有一个对象
+	int  login_state;
+	int  sign_in_state;
+	String user_name;
+	List<Down_load> serve_address;
+	Down_load downloader;
+	MainInter main_window;
+	
+	Login(MainInter main_window){
+		this.main_window=main_window;
+	}
+	
+	public int check_login_state() {
+		return login_state;
+	}
+	
+	private void test_xy(Component o) {
+		Listener m = new Listener();
+	    o.addMouseListener(m);
+	    o.addMouseMotionListener(m);
+	}
+	
+ 	private String get_icon_resource(String name) {
+			File temp=new File("");
+			System.out.println(temp.getAbsolutePath());
+			return temp.getAbsolutePath()+name;
+		}
+ 	//
+	public int creat(){
+			mainFrame = new JFrame("登录界面");
+			mainFrame.setSize(400,500);//Set the frame size
+			mainFrame.setResizable(false);
+			mainFrame.setLocationRelativeTo(null);//Center a frame		
+			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			 
+			JLabel headline=new JLabel("Developed by LYH",JLabel.CENTER);
+			headline.setSize(100,20);
+			ImageIcon icon =new ImageIcon(get_icon_resource("/resource/cool.png"));
+			JLabel commentlabel = new JLabel("", icon,JLabel.CENTER);
+		    
+			JPanel temp=new JPanel();temp.setLayout(null);//新建1级panel来控制几个组件的布局
+
+		    JButton jbtlogin = new JButton("login");
+		    JButton jbtsign_in = new JButton("sign in");
+		    JButton jbtexit = new JButton("exit");
+		    jbtexit.setBounds(280, 100, 60, 35); 
+		    jbtsign_in.setBounds(40, 100, 60, 35); 
+		    jbtlogin.setBounds(160, 100, 60, 35);  
+		    
+		    temp.add(jbtlogin);
+	        temp.add(jbtsign_in);
+	        temp.add(jbtexit);
+		    
+		    JPanel p2 = new JPanel(new GridLayout(3,1)); //新建2级的panel来控制几个组件的布局
+		    p2.add(headline);
+		    p2.add(commentlabel);
+		    p2.add(temp);
+
+		    mainFrame.add(p2);
+	        mainFrame.setVisible(true);
+		        
+	        jbtlogin.addActionListener(new ActionListener(){
+		        		@Override
+		            public void actionPerformed(ActionEvent e) {
+		        			creat_login();
+		            }
+		         });
+		    jbtsign_in.addActionListener(new ActionListener(){
+	        		@Override
+	            public void actionPerformed(ActionEvent e) {
+	        			creat_sign_in();
+	            }
+	         });
+		    jbtexit.addActionListener(new ActionListener(){
+	        		@Override
+	            public void actionPerformed(ActionEvent e) {
+	        			System.exit(0);
+	            }
+	         });
+		    
+		    System.out.println("end");
+		    return 0;
+		        
+		 }
+		
+	private int creat_login() {
+			Communicator sender= new Communicator();
+			
+			JFrame login = new JFrame("log in");
+			login.setSize(400,200);
+			
+			login.setResizable(false);
+			login.setLayout(new GridLayout(3,2,5,5));//行列元件数目，水平竖直间隔
+			
+			//第1行
+			login.add(new JLabel("user`s name"));
+			JTextField name=new JTextField(8);
+			name.setSize(80,40);
+			login.add(name);
+			
+			//第2行
+			login.add(new JLabel("pass word"));
+			JTextField password=new JTextField(8);
+			password.setSize(80,40);
+			login.add(password);
+			
+			//第3行 添加按钮
+			JButton yes =new JButton("yes");
+			yes.setSize(40,20);
+			JButton cancel =new JButton("cancel");
+			cancel.setSize(40,20);
+			login.add(yes);
+			login.add(cancel);
+			
+	        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        login.setVisible(true);
+			//设置按钮动作
+			yes.addActionListener(new ActionListener(){
+	    		@Override
+	    		public void actionPerformed(ActionEvent e) {
+	    			sender.log(name.getText(),password.getText());
+	    			boolean flag=(sender.redata.getcheckCode().compareTo(sender.right_statement)==0);
+	    			System.out.println(flag);
+	    			System.out.println(sender.redata.getBody_nth(0));
+        			if(flag && sender.redata.getBody_nth(0).compareTo("general_user")==0) {
+        				 creat_success_window();
+        				 user_name=name.getText();
+        				 main_window.user_name=user_name;
+        				 main_window.get_into_main();
+        				 mainFrame.dispose(); 
+        			}else if(flag && sender.redata.getBody_nth(0).compareTo("admin_user")==0) {
+        				 creat_success_window();
+       				 user_name=name.getText();
+       				 main_window.user_name=user_name;
+       				 main_window.get_into_manager();
+       				 mainFrame.dispose(); 
+        			}else{
+        				creat_wrong_window();//如果登陆failed，进入失败页面
+        				};	
+        			login.dispose();
+        			}
+	    		});
+			cancel.addActionListener(new ActionListener(){
+	    		@Override
+	        public void actionPerformed(ActionEvent e) {
+	    			login_state=0;
+	    			login.dispose();}
+	    		});
+			return 1;
+		 
+		 }
+		
+	private int creat_sign_in() {
+				
+		Communicator sender= new Communicator();
+		JFrame sign_in = new JFrame("sign in");
+		sign_in.setSize(400,200);
+		sign_in.setResizable(false);
+	 	sign_in.setLayout(new GridLayout(4,2,5,5));
+			 	//第1行
+	 	JTextField name=new JTextField(8);
+	 	sign_in.add(new JLabel("user`s name"));
+	 	sign_in.add(name);
+	
+			 	//第2行
+		JTextField pass=new JTextField(8);
+	 	sign_in.add(new JLabel("password"));
+	 	sign_in.add(pass);
+			 	
+			 	//第3行
+		JTextField pass2=new JTextField(8);
+	 	sign_in.add(new JLabel("password again"));
+	 	sign_in.add(pass2);
+			 	
+			 	//第4行，	put buttons
+		JButton yes =new JButton("yes");
+		yes.setSize(40,20);
+		JButton cancel =new JButton("cancel");
+		cancel.setSize(40,20);
+		sign_in.add(yes);
+		sign_in.add(cancel);
+		sign_in.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		sign_in.setVisible(true);
+				
+		//set actions
+			yes.addActionListener(new ActionListener(){
+			    		@Override
+			        public void actionPerformed(ActionEvent e) {
+			    			try {
+			    		String Users_name=name.getText();		
+			    		String Pass_word=pass.getText();
+		    			String Pass_word2=pass2.getText();
+		    		
+		    			sender.sign(Users_name,Pass_word);
+		    			if(Users_name.compareTo("")!=0 && 
+		    					Pass_word.compareTo(Pass_word2)==0 &&
+		    					Pass_word2.compareTo("")!=0 && 
+		    					sender.sign(name.getText(),pass.getText())){
+			   				creat_success_window();
+			   				sign_in_state=1;
+			    			}else {
+			    				sign_in_state=0;
+			    			}
+		    			
+				   	if(sign_in_state==1) {
+				    			creat_login();		    				
+			 			}else if (sign_in_state==0){
+			 				creat_wrong_window();
+			   			};	
+			   			sign_in.dispose();
+			    		}catch(Exception e1){
+			    			System.out.println("pleas retry");
+			    		}
+			    		}});
+			cancel.addActionListener(new ActionListener(){
+				    		@Override
+				       public void actionPerformed(ActionEvent e) {
+			    			sign_in_state=0;
+			    			sign_in.dispose();}});
+			
+		return 0;
+			 
+		 }
+	
+}
+
+class MainInter extends speWin {
+
+	JFrame mainFrame;//这个类只会有一个对象
+	String user_name;
+	File file;
+	
+	//
+	public int get_into_main(){ 
+		mainFrame = new JFrame("netdisk of "+this.user_name);
+	    mainFrame.setSize(800,400);//Set the frame size
+	    mainFrame.setResizable(false);
+	    mainFrame.setLayout(null);
+	    JPanel tool=new JPanel();
+	    tool.setLayout(new GridLayout(4,1));
+	    { 
+		    JButton upload = new JButton("upload");
+		    upload.setSize(40,20);
+		    
+		    JButton download = new JButton("download");
+		    download.setSize(40,20);
+		    
+		    JButton setting = new JButton("setting");
+		    setting.setSize(40,20);
+		    
+		    JButton help = new JButton("help");
+		    help.setSize(40,20);
+		    
+		    tool.add(upload);
+		    tool.add(download);
+		    tool.add(setting);
+		    tool.add(help); 
+		    //test_xy(upload);
+		    upload.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 creat_uploading();
+		         }
+		    });
+		    help.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 creat_help_window();
+		         }
+		    });
+	    }
+	    creat_file_tree(mainFrame,200,50);
+        mainFrame.setVisible(true);
+	    tool.setBounds(50, 50, 100, 200); 
+	    mainFrame.add(tool);
+	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainFrame.setVisible(true);
+	   
+		return 0;
+					
+		}
+		
+	public int get_into_manager(){ 
+		mainFrame = new JFrame("manage netdisk of "+this.user_name);
+	    mainFrame.setSize(800,400);//Set the frame size
+	    mainFrame.setResizable(false);
+	    mainFrame.setLayout(null);
+	    JPanel tool=new JPanel();
+	    tool.setLayout(new GridLayout(4,1));
+	    { 
+		    JButton upload = new JButton("upload");
+		    upload.setSize(40,20);
+		    
+		    JButton download = new JButton("download");
+		    download.setSize(40,20);
+		    
+		    JButton setting = new JButton("setting");
+		    setting.setSize(40,20);
+		    
+		    JButton help = new JButton("help");
+		    help.setSize(40,20);
+		    
+		    tool.add(upload);
+		    tool.add(download);
+		    tool.add(setting);
+		    tool.add(help); 
+		    //test_xy(upload);
+		    upload.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 creat_uploading();
+		         }
+		    });
+		    help.addActionListener(new ActionListener() {
+		         @Override
+		         public void actionPerformed(ActionEvent e) {
+		        	 creat_help_window();
+		         }
+		    });
+	    }
+	    creat_file_tree(mainFrame,200,50);
+        mainFrame.setVisible(true);
+	    tool.setBounds(50, 50, 100, 200); 
+	    mainFrame.add(tool);
+	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainFrame.setVisible(true);
+	   
+		return 0;
+					
+		}
+		
+}
+

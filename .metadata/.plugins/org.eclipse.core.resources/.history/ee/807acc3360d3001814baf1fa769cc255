@@ -1,0 +1,88 @@
+package problem4;
+
+public abstract class data_base{
+
+	protected String trade_list[];
+	protected String transfer_list[];
+	protected String touzi_list[];
+	
+	static protected String account_list[];
+	static protected String agency_list[];
+	protected int auth;
+	
+	protected int capacity_of_trade_list;
+	protected int capacity_of_transfer_list;
+	protected int capacity_of_touzi_list;
+	
+	public abstract void print_all_list();
+	public abstract void print_trade_list();
+	public abstract void print_transfer_list();
+	public abstract void print_touzi_list();
+	
+	private long account;
+	
+	 data_base(int a)
+	 
+	 {	
+		 capacity_of_trade_list=10;
+		 capacity_of_transfer_list=10;
+		 capacity_of_touzi_list=10;
+		 this.trade_list =new String[(int) capacity_of_trade_list];
+		 this.transfer_list =new String[(int) capacity_of_transfer_list];
+		 this.touzi_list =new String[(int) capacity_of_touzi_list];
+		 this.auth=a;
+	 	}
+}
+
+class touzi_account extends data_base{
+
+	touzi_account(int a) {
+		super(a);
+	}
+
+	private double interest_rate;
+	
+	
+	@Override
+	public void print_all_list() {
+		this.print_trade_list();
+		this.print_transfer_list();
+		print_touzi_list();
+	}
+
+	@Override
+	public void print_trade_list() {
+		System.out.println("touzi list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+			}
+	}
+	
+	@Override
+	public void print_transfer_list() {
+		System.out.println("transfer list is:");
+		for(String i:this.transfer_list) {
+			System.out.println(i);
+	}
+	}
+
+	@Override
+	public void print_touzi_list() {
+		System.out.println("trade list is:");
+		for(String i:this.touzi_list) {
+			System.out.println(i);
+		}
+	}
+	
+	public void get_acount_list() {
+		if(this.auth>1) {
+			for(int i=0;i<=data_base.agency_list.length;i++) 
+				System.out.println(this.agency_list[i]);
+			}else {
+				System.out.println("you dont have the authority");
+			}
+	}
+
+
+	
+}

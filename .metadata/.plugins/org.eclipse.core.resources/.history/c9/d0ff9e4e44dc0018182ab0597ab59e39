@@ -1,0 +1,105 @@
+package computer;
+import java.util.Date;
+import java.util.Random;
+import java.util.Scanner;
+
+
+
+class Computer<T> implements Compute<T>{
+
+	private T result;
+	private  StringBuffer exprssion =new StringBuffer();
+	
+	Computer(){
+		Integer temp=0;
+		this.result=(T)temp;
+		System.out.println("Already prepared.");
+	}
+	public void get_expression() {
+		
+	}
+	public void getresult() {
+		System.out.println("the result is: "+ this.result.toString());
+	}
+	public void clear() {
+		Integer temp=0;
+		this.result=(T)temp;
+		System.out.println("Already prepared.");
+	}
+
+	@Override
+	public T puls(T a, T b) {
+		Double T1 = Double.parseDouble(a.toString());
+		Double T2 = Double.parseDouble(b.toString());
+		Double result=T1+T2;
+		this.result=(T)result;
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T plus(T b) {
+		T result=puls(this.result , b);
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T devide(T a, T b) {
+		Double T1 = Double.parseDouble(a.toString());
+		Double T2 = Double.parseDouble(b.toString());
+		Double result=T1/T2;
+		this.result=(T)result;
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T devide(T b) {
+		T result=devide(this.result , b);
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T minus(T a, T b) {
+		Double T1 = Double.parseDouble(a.toString());
+		Double T2 = Double.parseDouble(b.toString());
+		Double result=T1-T2;
+		this.result=(T)result;
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T minus(T b) {
+		T result=minus(this.result , b);
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T time(T a, T b) {
+		Double T1 = Double.parseDouble(a.toString());
+		Double T2 = Double.parseDouble(b.toString());
+		Double result=T1*T2;
+		this.result=(T)result;
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+	@Override
+	public T time(T b) {
+		T result=time(this.result , b);
+		System.out.println("Result has been saved.");
+		return this.result;
+	}
+
+	@Override
+	public Object factorial(Object temp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object pow(Object temp, Object temp2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+}

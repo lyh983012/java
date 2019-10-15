@@ -1,0 +1,10 @@
+package computer;
+
+public class test {
+
+	public static void main (String arg[]) {
+		Computer<Integer> Pc1= new Computer<Integer>();//范型必须是类类型
+		Pc1.plus(1);
+		Pc1.getresult();
+	}
+}
